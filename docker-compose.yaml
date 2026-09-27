@@ -1,0 +1,29 @@
+services:
+  web:
+    image: nginx:stable-alpine
+    container_name: ec2-sim-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./website:/usr/share/nginx/html:ro
+    networks:
+      - aws-sim-net
+
+  localstack:
+    image: localstack/localstack:3.8.1
+    container_name: s3-sim-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack-data:/var/lib/localstack
+    networks:
+      - aws-sim-net
+
+networks:
+  aws-sim-net:
+
+volumes:
+  localstack-data:
